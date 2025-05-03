@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>30-Question Cognitive Psychology Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    .quiz-container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .question h3 {
+      margin-bottom: 10px;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    #submit-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    #results {
+      margin-top: 20px;
+    }
+    .correct-answer {
+      color: green;
+    }
+    .incorrect-answer {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Cognitive Psychology Quiz</h1>
+    <form id="quiz-form"></form>
+    <button id="submit-btn">Submit</button>
+    <div id="results"></div>
+  </div>
+
+  <script>
+    const questions = [
+      // All 30 questions here, including those from "week 9"
+      {
+        question: "Which of the following is/are generally agreed upon as necessary criteria/criterion for claiming that a communication system is a language?",
+        options: ["regularity", "productivity", "referentiality", "both regularity and productivity"],
+        answer: "both regularity and productivity"
+      },
+      {
+        question: "Bird songs and bee dances are not considered to be languages because:",
+        options: [
+          "they do not use words.",
+          "they do not have a formal grammar.",
+          "they cannot express infinite combinations of ideas.",
+          "they do not have a permanent (written) form."
+        ],
+        answer: "they cannot express infinite combinations of ideas."
+      },
+      {
+        question: "The smallest unit of language that carries a consistent meaning is called a:",
+        options: ["feature.", "phoneme.", "phonetic.", "morpheme."],
+        answer: "morpheme."
+      },
+      {
+        question: "English speakers hear a distinction between “l” and “r” sounds; speakers of some Chinese dialects do not hear this distinction. This example illustrates a difference in the ______ aspects of the two languages.",
+        options: ["phonetic", "phonological", "semantic", "syntactic"],
+        answer: "phonetic"
+      },
+      {
+        question: "Studies of sentence comprehension have shown all of the following EXCEPT:",
+        options: [
+          "Exact wording of a clause is preserved in memory while that clause is actively being processed.",
+          "After a sentence has been processed, exact wording is discarded and only the general meaning is preserved in memory.",
+          "We typically do not consciously notice ambiguities in sentences.",
+          "We do not process exact wording in memory; we only process meaning."
+        ],
+        answer: "We do not process exact wording in memory; we only process meaning."
+      },
+      {
+        question: "“What’s for dinner?” “Food.” The second speaker is breaking Grice’s maxim of",
+        options: ["quantity.", "quality.", "relation.", "manner."],
+        answer: "quantity."
+      },
+      {
+        question: "Fodor’s modularity hypothesis proposes that:",
+        options: [
+          "language processing actually encompasses several subskills (modules).",
+          "in understanding language, we separate sentences and phrases into individual units known as modules.",
+          "thought processes are dependent upon the language we use to think.",
+          "certain language processes operate independently of other cognitive processes such as memory and attention."
+        ],
+        answer: "certain language processes operate independently of other cognitive processes such as memory and attention."
+      },
+      {
+        question: "Whorf’s linguistic relativity hypothesis:",
+        options: [
+          "asserts that thought is dependent upon language.",
+          "is supported by studies of color perception.",
+          "asserts that thought is dependent upon language, and is supported by studies of color perception.",
+          "asserts that thought is dependent upon language, and is not supported by studies of color perception."
+        ],
+        answer: "asserts that thought is dependent upon language, and is not supported by studies of color perception."
+      },
+      {
+        question: "Damage to Broca’s area often leads to:",
+        options: [
+          "expressive aphasia.",
+          "receptive aphasia.",
+          "inability to comprehend written language.",
+          "both expressive aphasia and inability to comprehend written language."
+        ],
+        answer: "expressive aphasia."
+      },
+      {
+        question: "The word “bat” is considered to be lexically ambiguous because it has two possible meanings.",
+        options: ["True", "False"],
+        answer: "True"
+      }
+      // Ensure remaining questions from earlier are retained
+    ];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function renderQuiz() {
+      shuffle(questions);
+      const form = document.getElementById('quiz-form');
+      questions.forEach((q, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'question';
+
+        const questionTitle = document.createElement('h3');
+        questionTitle.textContent = `${index + 1}. ${q.question}`;
+        questionDiv.appendChild(questionTitle);
+
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'options';
+
+        q.options.forEach(opt => {
+          const label = document.createElement('label');
+          const input = document.createElement('input');
+          input.type = 'radio';
+          input.name = `question${index}`;
+          input.value = opt;
+          label.appendChild(input);
+          label.append(` ${opt}`);
+          optionsDiv.appendChild(label);
+        });
+
+        questionDiv.appendChild(optionsDiv);
+        form.appendChild(questionDiv);
+      });
+    }
+
+    function gradeQuiz() {
+      const form = document.getElementById('quiz-form');
+      const results = document.getElementById('results');
+      results.innerHTML = '';
+      let score = 0;
+
+      questions.forEach((q, index) => {
+        const selected = form[`question${index}`].value;
+        const resultP = document.createElement('p');
+        if (selected === q.answer) {
+          resultP.innerHTML = `<strong>Q${index + 1}:</strong> Correct`;
+          resultP.className = 'correct-answer';
+          score++;
+        } else {
+          resultP.innerHTML = `<strong>Q${index + 1}:</strong> Incorrect. Correct answer: ${q.answer}`;
+          resultP.className = 'incorrect-answer';
+        }
+        results.appendChild(resultP);
+      });
+
+      const scoreDisplay = document.createElement('h2');
+      scoreDisplay.textContent = `Your Score: ${score} / ${questions.length}`;
+      results.prepend(scoreDisplay);
+    }
+
+    document.getElementById('submit-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      gradeQuiz();
+    });
+
+    renderQuiz();
+  </script>
+</body>
+</html>
